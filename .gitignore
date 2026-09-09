@@ -1,6 +1,11 @@
 # Logs
 logs
 *.log
+
+# Python virtual environment and bytecode
+.venv/
+__pycache__/
+*.py[cod]
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
