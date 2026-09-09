@@ -1,0 +1,12 @@
+lwAddDevice("TEKWILL-WIFI", 11, "Linksys-WRT300N", 120, 100);
+lwAddDevice("RUTX11", 0, "2911", 480, 180);
+lwAddDevice("WLAN-EMULATION-SW", 1, "2960-24TT", 350, 330);
+lwAddDevice("REAR_LED_BMS_BLE_READER", 8, "PC-PT", 120, 460);
+lwAddDevice("ROS_CONTROLLER", 0, "2911", 600, 430);
+lwAddDevice("SAFETY_PLC", 8, "PC-PT", 800, 560);
+lwAddLink("TEKWILL-WIFI", "Ethernet 1", "RUTX11", "GigabitEthernet0/0", 8100);
+lwAddLink("RUTX11", "GigabitEthernet0/1", "ROS_CONTROLLER", "GigabitEthernet0/0", 8101);
+lwAddLink("RUTX11", "GigabitEthernet0/2", "WLAN-EMULATION-SW", "GigabitEthernet0/1", 8100);
+lwAddLink("WLAN-EMULATION-SW", "FastEthernet0/1", "REAR_LED_BMS_BLE_READER", "FastEthernet0", 8100);
+lwAddLink("WLAN-EMULATION-SW", "FastEthernet0/2", "ROS_CONTROLLER", "GigabitEthernet0/2", 8100);
+lwAddLink("ROS_CONTROLLER", "GigabitEthernet0/1", "SAFETY_PLC", "FastEthernet0", 8101);

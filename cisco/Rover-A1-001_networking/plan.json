@@ -1,0 +1,174 @@
+{
+  "name": "Rover-A1-001 Networking",
+  "devices": [
+    {
+      "name": "TEKWILL-WIFI",
+      "model": "Linksys-WRT300N",
+      "category": "wireless_router",
+      "role": "wan_cloud",
+      "x": 120,
+      "y": 100,
+      "interfaces": {},
+      "gateway": "",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "RUTX11",
+      "model": "2911",
+      "category": "router",
+      "role": "edge_router",
+      "x": 480,
+      "y": 180,
+      "interfaces": {
+        "GigabitEthernet0/0": "172.22.100.97/24",
+        "GigabitEthernet0/1": "192.168.1.1/24",
+        "GigabitEthernet0/2": "192.168.77.1/24"
+      },
+      "gateway": "",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "WLAN-EMULATION-SW",
+      "model": "2960-24TT",
+      "category": "switch",
+      "role": "access_switch",
+      "x": 350,
+      "y": 330,
+      "interfaces": {},
+      "gateway": "",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "REAR_LED_BMS_BLE_READER",
+      "model": "PC-PT",
+      "category": "pc",
+      "role": "end_host",
+      "x": 120,
+      "y": 460,
+      "interfaces": {
+        "FastEthernet0": "192.168.77.201/24"
+      },
+      "gateway": "192.168.77.1",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "ROS_CONTROLLER",
+      "model": "2911",
+      "category": "router",
+      "role": "branch_router",
+      "x": 600,
+      "y": 430,
+      "interfaces": {
+        "GigabitEthernet0/0": "192.168.1.201/24",
+        "GigabitEthernet0/1": "192.168.88.10/24",
+        "GigabitEthernet0/2": "192.168.77.203/24"
+      },
+      "gateway": "",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    },
+    {
+      "name": "SAFETY_PLC",
+      "model": "PC-PT",
+      "category": "pc",
+      "role": "end_host",
+      "x": 800,
+      "y": 560,
+      "interfaces": {
+        "FastEthernet0": "192.168.88.11/24"
+      },
+      "gateway": "192.168.88.10",
+      "interfaces_v6": {},
+      "gateway_v6": "",
+      "vlan": 0,
+      "wireless": false
+    }
+  ],
+  "modules": [],
+  "links": [
+    {
+      "device_a": "TEKWILL-WIFI",
+      "port_a": "Ethernet 1",
+      "device_b": "RUTX11",
+      "port_b": "GigabitEthernet0/0",
+      "cable": "straight"
+    },
+    {
+      "device_a": "RUTX11",
+      "port_a": "GigabitEthernet0/1",
+      "device_b": "ROS_CONTROLLER",
+      "port_b": "GigabitEthernet0/0",
+      "cable": "cross"
+    },
+    {
+      "device_a": "RUTX11",
+      "port_a": "GigabitEthernet0/2",
+      "device_b": "WLAN-EMULATION-SW",
+      "port_b": "GigabitEthernet0/1",
+      "cable": "straight"
+    },
+    {
+      "device_a": "WLAN-EMULATION-SW",
+      "port_a": "FastEthernet0/1",
+      "device_b": "REAR_LED_BMS_BLE_READER",
+      "port_b": "FastEthernet0",
+      "cable": "straight"
+    },
+    {
+      "device_a": "WLAN-EMULATION-SW",
+      "port_a": "FastEthernet0/2",
+      "device_b": "ROS_CONTROLLER",
+      "port_b": "GigabitEthernet0/2",
+      "cable": "straight"
+    },
+    {
+      "device_a": "ROS_CONTROLLER",
+      "port_a": "GigabitEthernet0/1",
+      "device_b": "SAFETY_PLC",
+      "port_b": "FastEthernet0",
+      "cable": "cross"
+    }
+  ],
+  "dhcp_pools": [],
+  "static_routes": [
+    {
+      "router": "RUTX11",
+      "destination": "192.168.88.0",
+      "mask": "255.255.255.0",
+      "next_hop": "192.168.1.201",
+      "admin_distance": 1
+    },
+    {
+      "router": "ROS_CONTROLLER",
+      "destination": "0.0.0.0",
+      "mask": "0.0.0.0",
+      "next_hop": "192.168.1.1",
+      "admin_distance": 1
+    }
+  ],
+  "ospf_configs": [],
+  "rip_configs": [],
+  "eigrp_configs": [],
+  "vlans": [],
+  "access_ports": [],
+  "trunks": [],
+  "subinterfaces": [],
+  "validations": [],
+  "dual_stack": false,
+  "errors": [],
+  "warnings": []
+}

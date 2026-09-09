@@ -1,0 +1,24 @@
+enable
+configure terminal
+hostname ROS_CONTROLLER
+no ip domain-lookup
+
+interface GigabitEthernet0/0
+ ip address 192.168.1.201 255.255.255.0
+ no shutdown
+ exit
+
+interface GigabitEthernet0/1
+ ip address 192.168.88.10 255.255.255.0
+ no shutdown
+ exit
+
+interface GigabitEthernet0/2
+ ip address 192.168.77.203 255.255.255.0
+ no shutdown
+ exit
+
+ip route 0.0.0.0 0.0.0.0 192.168.1.1
+
+end
+write memory

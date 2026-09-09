@@ -1,0 +1,5 @@
+enable
+configure terminal
+hostname WLAN-EMULATION-SW
+end
+write memory

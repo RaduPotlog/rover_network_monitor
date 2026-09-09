@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rover Network Monitor</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #101827; color: #edf2f7; }
+    body { margin: 0; max-width: 1100px; padding: 2rem; margin-inline: auto; }
+    h1 { margin-bottom: .25rem; } .muted { color: #9caec4; }
+    #summary, #devices { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+    #summary { margin: 1.5rem 0; } .count, .device { background: #1d2939; border-radius: .75rem; padding: 1rem; }
+    .device { border-left: 5px solid #64748b; } .online { border-color: #22c55e; } .partial { border-color: #f59e0b; } .offline { border-color: #ef4444; }
+    .badge { float: right; text-transform: uppercase; font-size: .75rem; font-weight: 700; } table { border-collapse: collapse; width: 100%; margin-top: .75rem; font-size: .88rem; }
+    td { border-top: 1px solid #344258; padding: .55rem .2rem; } a { color: #93c5fd; } .error { color: #fca5a5; }
+  </style>
+</head>
+<body>
+  <h1>Rover network monitor</h1>
+  <p class="muted">ICMP status of devices defined by the Rover A1 topology. Refreshes every 5 seconds.</p>
+  <section id="summary"></section><section id="devices"></section>
+  <script>
+    const states = ['online', 'partial', 'offline', 'unknown'];
+    const show = value => value == null ? '—' : value;
+    const detailId = location.pathname.match(/^\/devices\/([^/]+)$/)?.[1];
+    function render(data) {
+      document.querySelector('#summary').innerHTML = states.map(s => `<div class="count ${s}"><strong>${data.summary[s]}</strong> ${s}</div>`).join('');
+      document.querySelector('#devices').innerHTML = data.devices.map(d => `<article class="device ${d.status}"><span class="badge">${d.status}</span><h2>${d.name}</h2><p class="muted">${d.role}</p><table>${d.interfaces.map(i => `<tr><td>${i.name}</td><td>${i.address}</td><td>${i.status}</td><td>${show(i.latency_ms)}${i.latency_ms == null ? '' : ' ms'}</td></tr>`).join('')}</table><p class="muted">Last check: ${show(d.interfaces.map(i => i.checked_at).filter(Boolean).sort().at(-1))}</p>${detailId ? `<details><summary>Recent probes</summary>${d.interfaces.map(i => `<p>${i.name}: ${i.history.map(h => `${h.checked_at} ${h.reachable ? 'online' : 'offline'}`).join('<br>')}</p>`).join('')}</details><p><a href="/">Back to all devices</a></p>` : `<a href="/devices/${d.id}">View detail</a>`}</article>`).join('');
+    }
+    async function refresh() { try {
+      const data = await (await fetch('/api/devices')).json();
+      if (detailId) {
+        const device = data.devices.find(d => d.id === detailId);
+        if (!device) throw new Error('Device not found');
+        document.querySelector('h1').textContent = device.name;
+        document.querySelector('.muted').textContent = `${device.role} — interface status and recent probe history.`;
+        data.devices = [device];
+        data.summary = Object.fromEntries(states.map(s => [s, device.status === s ? 1 : 0]));
+      }
+      render(data);
+    } catch (_) { document.querySelector('#devices').textContent = 'Unable to load monitor data.'; } }
+    refresh(); setInterval(refresh, 5000);
+  </script>
+</body>
+</html>
