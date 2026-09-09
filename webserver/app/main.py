@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import os
 from contextlib import asynccontextmanager, suppress
 from pathlib import Path
@@ -21,7 +22,24 @@ def integer_setting(name: str, default: int) -> int:
 POLL_INTERVAL_SECONDS = integer_setting("ROVER_WEB_POLL_INTERVAL_SECONDS", 5)
 PING_TIMEOUT_SECONDS = integer_setting("ROVER_WEB_PING_TIMEOUT_SECONDS", 1)
 APP_DIR = Path(__file__).parent
-monitor = NetworkMonitor(load_devices(APP_DIR / "devices.json"), PingProber(), PING_TIMEOUT_SECONDS)
+
+
+def resolve_devices() -> list[dict]:
+    """Load the device list, overridable without rebuilding the image.
+
+    balenaOS cannot bind-mount a host file into a container, so the inline
+    ROVER_WEB_DEVICES_JSON variable is the practical way to retarget a fleet
+    or a single device from balenaCloud. ROVER_WEB_DEVICES_FILE covers the
+    case where the list arrives on a mounted volume instead. With neither set
+    the committed devices.json is used, so behaviour is unchanged by default.
+    """
+    inline = os.getenv("ROVER_WEB_DEVICES_JSON")
+    if inline:
+        return json.loads(inline)
+    return load_devices(Path(os.getenv("ROVER_WEB_DEVICES_FILE", APP_DIR / "devices.json")))
+
+
+monitor = NetworkMonitor(resolve_devices(), PingProber(), PING_TIMEOUT_SECONDS)
 
 
 async def poll_forever() -> None:
