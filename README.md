@@ -24,6 +24,11 @@ or, from `webserver/`: `npm ci && npm start`. Requires Node.js 20+ and the
 
 Topology link ends reference a device interface by `name`; ends without an
 `interface` (switch ports, the upstream Wi-Fi) mirror the far end's state.
+Ethernet links set `cable` (`straight` or `cross`) and a `port` per end; Wi-Fi
+links set `"medium": "wireless"` and are drawn dotted with a Wi-Fi mark.
+
+The topology is the real rover's. The `WLAN-EMULATION-SW` switch in `cisco/`
+only stands in for Wi-Fi inside Packet Tracer, so the monitor doesn't show it.
 
 ## HTTP API
 

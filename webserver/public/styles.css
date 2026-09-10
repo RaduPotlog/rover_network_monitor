@@ -130,8 +130,17 @@ h2 { font-size: 1.05rem; margin: 0; letter-spacing: .01em; }
 
 .cable { stroke: var(--black); stroke-width: 2.4; fill: none; }
 .cable-cross { stroke-dasharray: 10 6; }
+.cable-wireless { stroke-dasharray: 1 6; stroke-linecap: round; stroke-width: 3; }
 .link:hover .cable { stroke: var(--orange-deep); stroke-width: 3.4; }
 .link-hit { stroke: transparent; stroke-width: 16; fill: none; cursor: help; }
+
+.wifi-glyph { cursor: help; }
+.wifi-plate { fill: var(--white); stroke: var(--gray-800); stroke-width: 1.4; }
+.wifi-arc { fill: none; stroke: var(--gray-800); stroke-width: 1.8; stroke-linecap: round; }
+.wifi-dot { fill: var(--gray-800); }
+.link:hover .wifi-plate { stroke: var(--orange-deep); }
+.link:hover .wifi-arc { stroke: var(--orange-deep); }
+.link:hover .wifi-dot { fill: var(--orange-deep); }
 
 .light-online { fill: var(--ok); }
 .light-offline { fill: var(--bad); }

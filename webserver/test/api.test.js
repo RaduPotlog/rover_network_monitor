@@ -51,10 +51,16 @@ test('pages, static assets and topology', async () => {
   assert.equal((await get('/logos/Logo-Arm-WhiteOrange-372x372-1.png')).headers.get('content-type'), 'image/png');
 
   const topology = await (await get('/api/topology')).json();
-  assert.equal(topology.links.length, 5);
-  const rosToSwitch = topology.links.filter((link) =>
-    [link.a.node, link.b.node].sort().join() === 'ros-controller,wlan-emulation-sw');
-  assert.equal(rosToSwitch.length, 0);
+  assert.equal(topology.links.length, 4);
+  // The Wi-Fi switch only exists in the Packet Tracer emulation, not on the rover.
+  assert.ok(!topology.nodes.some((node) => node.id === 'wlan-emulation-sw'));
+  const between = (x, y) => topology.links.filter((link) =>
+    [link.a.node, link.b.node].sort().join() === [x, y].sort().join());
+  for (const [x, y] of [['rutx11', 'rear-led-bms-ble-reader'], ['tekwill-wifi', 'rutx11']]) {
+    const links = between(x, y);
+    assert.equal(links.length, 1, `${x} ↔ ${y}`);
+    assert.equal(links[0].medium, 'wireless', `${x} ↔ ${y}`);
+  }
 });
 
 test('every topology link interface exists on its device', () => {

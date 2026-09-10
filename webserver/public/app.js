@@ -41,8 +41,17 @@ function lightShape(x, y, state) {
   return `<circle class="light-unknown" cx="${x}" cy="${y}" r="4.5"/>`;
 }
 
+// Three arcs over a dot on a round plate, marking a radio link at its midpoint.
+function wifiGlyph(x, y) {
+  return `<g class="wifi-glyph" transform="translate(${x} ${y})">
+    <circle class="wifi-plate" r="12"/>
+    <path class="wifi-arc" d="M-8 -1.5a11.3 11.3 0 0 1 16 0M-5.2 1.4a7.3 7.3 0 0 1 10.4 0M-2.5 4.2a3.5 3.5 0 0 1 5 0"/>
+    <circle class="wifi-dot" cy="7" r="1.4"/>
+  </g>`;
+}
+
 function describeEnd(node, end, iface) {
-  const where = `<b>${escapeHtml(node.name)}</b> ${escapeHtml(end.port)}`;
+  const where = `<b>${escapeHtml(node.name)}</b>${end.port ? ` ${escapeHtml(end.port)}` : ''}`;
   if (!iface) return `${where}<br>not monitored`;
   return `${where}<br>${escapeHtml(iface.name)} ${escapeHtml(iface.address)} · ${escapeHtml(iface.status)}`
     + `${iface.latency_ms == null ? '' : ` · ${iface.latency_ms} ms`}`;
@@ -75,13 +84,16 @@ function renderTopology(devices) {
     const ux = (bx - ax) / length; const uy = (by - ay) / length;
     const ifaceA = interfaceOf(devicesById, nodeA, link.a);
     const ifaceB = interfaceOf(devicesById, nodeB, link.b);
-    const cable = link.cable === 'cross' ? 'cable cable-cross' : 'cable';
-    const tip = `${link.cable === 'cross' ? 'Crossover' : 'Straight-through'} cable<br>`
+    const wireless = link.medium === 'wireless';
+    const [cable, kind] = wireless ? ['cable cable-wireless', 'Wi-Fi link']
+      : link.cable === 'cross' ? ['cable cable-cross', 'Crossover cable'] : ['cable', 'Straight-through cable'];
+    const tip = `${kind}<br>`
       + `${describeEnd(nodeA, link.a, ifaceA)}<br>↕<br>${describeEnd(nodeB, link.b, ifaceB)}`;
     const d = `M${ax} ${ay}L${bx} ${by}`;
     return `<g class="link" data-tip="${escapeHtml(tip)}">
       <path class="${cable}" d="${d}"/>
       <path class="link-hit" d="${d}"/>
+      ${wireless ? wifiGlyph((ax + bx) / 2, (ay + by) / 2) : ''}
       ${lightShape(ax + ux * lightDistance(uy), ay + uy * lightDistance(uy), lightState(ifaceA, ifaceB))}
       ${lightShape(bx - ux * lightDistance(-uy), by - uy * lightDistance(-uy), lightState(ifaceB, ifaceA))}
     </g>`;

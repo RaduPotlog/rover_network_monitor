@@ -6,14 +6,13 @@
     {"id": "rutx11", "name": "RUTX11", "model": "2911", "kind": "router", "x": 335, "y": 95, "device": "rutx11"},
     {"id": "ros-controller", "name": "ROS_CONTROLLER", "model": "2911", "kind": "router", "x": 605, "y": 95, "device": "ros-controller"},
     {"id": "safety-plc", "name": "SAFETY_PLC", "model": "PC-PT", "kind": "pc", "x": 850, "y": 95, "device": "safety-plc"},
-    {"id": "wlan-emulation-sw", "name": "WLAN-EMULATION-SW", "model": "2960-24TT", "kind": "switch", "x": 335, "y": 375},
-    {"id": "rear-led-bms-ble-reader", "name": "REAR_LED_BMS_BLE_READER", "model": "PC-PT", "kind": "pc", "x": 100, "y": 375, "device": "rear-led-bms-ble-reader"}
+    {"id": "rear-led-bms-ble-reader", "name": "REAR_LED_BMS_BLE_READER", "model": "PC-PT", "kind": "pc", "x": 335, "y": 375, "device": "rear-led-bms-ble-reader"}
   ],
   "links": [
     {
-      "cable": "straight",
-      "a": {"node": "tekwill-wifi", "port": "Ethernet 1"},
-      "b": {"node": "rutx11", "port": "GigabitEthernet0/0", "interface": "WAN"}
+      "medium": "wireless",
+      "a": {"node": "tekwill-wifi"},
+      "b": {"node": "rutx11", "interface": "WAN"}
     },
     {
       "cable": "cross",
@@ -21,14 +20,9 @@
       "b": {"node": "ros-controller", "port": "GigabitEthernet0/0", "interface": "ETH1"}
     },
     {
-      "cable": "straight",
-      "a": {"node": "rutx11", "port": "GigabitEthernet0/2", "interface": "WLAN"},
-      "b": {"node": "wlan-emulation-sw", "port": "GigabitEthernet0/1"}
-    },
-    {
-      "cable": "straight",
-      "a": {"node": "wlan-emulation-sw", "port": "FastEthernet0/1"},
-      "b": {"node": "rear-led-bms-ble-reader", "port": "FastEthernet0", "interface": "WLAN"}
+      "medium": "wireless",
+      "a": {"node": "rutx11", "interface": "WLAN"},
+      "b": {"node": "rear-led-bms-ble-reader", "interface": "WLAN"}
     },
     {
       "cable": "cross",
