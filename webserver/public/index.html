@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rover A1 · Network Monitor</title>
+  <link rel="icon" type="image/png" href="/logos/LogoMATransparentRound-80x80-1.png">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="Rover A1 network monitor home">
+        <img class="brand-logo" src="/logos/Logo-Arm-WhiteOrange-372x372-1.png" alt="Mechatronics Academy logo" width="56" height="56">
+        <span class="brand-text">
+          <span class="brand-kicker">Mechatronics Academy · Rover A1</span>
+          <span class="brand-title" id="page-title">Network Monitor</span>
+        </span>
+      </a>
+      <div class="live" id="live"><span class="live-dot"></span><span id="live-text">Connecting…</span></div>
+    </div>
+  </header>
+
+  <main class="page">
+    <p class="lede" id="lede">ICMP status of every interface in the Rover A1 topology. Refreshes every 5 seconds.</p>
+    <div class="banner" id="error-banner" hidden>Unable to load monitor data. Retrying…</div>
+
+    <section class="summary" id="summary" aria-label="Status summary"></section>
+
+    <section class="panel" aria-labelledby="topology-heading">
+      <div class="panel-head">
+        <h2 id="topology-heading">Topology</h2>
+        <span class="panel-sub" id="topology-name"></span>
+      </div>
+      <div class="canvas-wrap">
+        <svg class="topology" id="topology" role="img" aria-label="Network topology diagram"></svg>
+        <div class="tooltip" id="tooltip" hidden></div>
+      </div>
+      <ul class="legend">
+        <li><svg viewBox="0 0 14 12" aria-hidden="true"><path d="M7 1 13 11H1Z" class="light-online"/></svg>Link up</li>
+        <li><svg viewBox="0 0 14 12" aria-hidden="true"><path d="M1 1h12L7 11Z" class="light-offline"/></svg>Link down</li>
+        <li><svg viewBox="0 0 14 12" aria-hidden="true"><circle cx="7" cy="6" r="4.5" class="light-unknown"/></svg>Not monitored / pending</li>
+        <li><svg viewBox="0 0 28 12" aria-hidden="true"><line x1="1" y1="6" x2="27" y2="6" class="cable"/></svg>Straight-through</li>
+        <li><svg viewBox="0 0 28 12" aria-hidden="true"><line x1="1" y1="6" x2="27" y2="6" class="cable cable-cross"/></svg>Crossover</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="devices-heading">
+      <div class="section-head">
+        <h2 id="devices-heading">Devices</h2>
+        <a class="back" id="back-link" href="/" hidden>← All devices</a>
+      </div>
+      <div class="devices" id="devices"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <img src="/logos/Logo-Arm-WhiteOrange-372x372-1.png" alt="" width="96" height="96">
+    <div>
+      <strong>Mechatronics Academy</strong>
+      <span>Rover A1 network monitor</span>
+    </div>
+  </footer>
+
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>

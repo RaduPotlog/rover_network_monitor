@@ -23,8 +23,7 @@
     "role": "Rover ROS 2 controller",
     "interfaces": [
       {"name": "ETH1", "address": "192.168.1.201"},
-      {"name": "ETH0", "address": "192.168.88.10"},
-      {"name": "WLAN0", "address": "192.168.77.203"}
+      {"name": "ETH0", "address": "192.168.88.10"}
     ]
   },
   {

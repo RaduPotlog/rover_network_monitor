@@ -1,0 +1,19 @@
+{
+  "name": "rover-network-monitor",
+  "version": "1.0.0",
+  "description": "ICMP status dashboard for the Rover A1 network topology.",
+  "private": true,
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "license": "MIT"
+}
