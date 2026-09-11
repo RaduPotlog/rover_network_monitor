@@ -1,13 +1,20 @@
 import { createApp } from './app.js';
-import { integerSetting, resolveDevices, resolveTopology } from './config.js';
+import { integerSetting, resolveDevices, resolveLedReference, resolveTopology, stringSetting } from './config.js';
+import { LedMonitor } from './led.js';
 import { NetworkMonitor, PingProber } from './monitor.js';
+import { RosBridgeClient } from './ros_bridge.js';
 
 const PORT = integerSetting('ROVER_WEB_PORT', 8080);
 const POLL_INTERVAL_SECONDS = integerSetting('ROVER_WEB_POLL_INTERVAL_SECONDS', 5);
 const PING_TIMEOUT_SECONDS = integerSetting('ROVER_WEB_PING_TIMEOUT_SECONDS', 1);
+const ROSBRIDGE_URL = stringSetting('ROVER_WEB_ROSBRIDGE_URL', 'ws://127.0.0.1:9090');
 
 const monitor = new NetworkMonitor(resolveDevices(), new PingProber(), PING_TIMEOUT_SECONDS);
-const app = createApp({ monitor, topology: resolveTopology() });
+const bridge = new RosBridgeClient(ROSBRIDGE_URL);
+const led = new LedMonitor(bridge, resolveLedReference());
+const app = createApp({ monitor, topology: resolveTopology(), led });
+
+bridge.start();
 
 // Complete one sweep before accepting traffic so the first page load has data.
 await monitor.pollOnce();
@@ -36,6 +43,7 @@ function shutdown(signal) {
   console.log(`Received ${signal}, shutting down`);
   stopping = true;
   clearTimeout(timer);
+  bridge.close();
   server.close(() => process.exit(0));
   server.closeAllConnections();
 }

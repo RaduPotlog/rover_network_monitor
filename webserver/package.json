@@ -1,12 +1,12 @@
 {
   "name": "rover-network-monitor",
   "version": "1.0.0",
-  "description": "ICMP status dashboard for the Rover A1 network topology.",
+  "description": "Rover A1 dashboard: ICMP status of the network topology and LED animation status.",
   "private": true,
   "type": "module",
   "main": "src/server.js",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "start": "node src/server.js",

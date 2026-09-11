@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 
 import { createApp } from '../src/app.js';
-import { resolveDevices, resolveTopology } from '../src/config.js';
+import { resolveDevices, resolveLedReference, resolveTopology } from '../src/config.js';
+import { LedMonitor } from '../src/led.js';
 import { NetworkMonitor } from '../src/monitor.js';
 
 const prober = {
@@ -17,7 +18,9 @@ let baseUrl;
 before(async () => {
   const monitor = new NetworkMonitor(resolveDevices({}), prober);
   await monitor.pollOnce();
-  server = createApp({ monitor, topology: resolveTopology({}) }).listen(0, '127.0.0.1');
+  const bridge = { connected: false, subscribe() {} };
+  const led = new LedMonitor(bridge, resolveLedReference());
+  server = createApp({ monitor, topology: resolveTopology({}), led }).listen(0, '127.0.0.1');
   await new Promise((resolve) => server.once('listening', resolve));
   baseUrl = `http://127.0.0.1:${server.address().port}`;
 });
@@ -77,4 +80,16 @@ test('every topology link interface exists on its device', () => {
         `${end.node} has no interface ${end.interface}`);
     }
   }
+});
+
+test('LED page and status endpoint', async () => {
+  assert.match(await (await get('/led')).text(), /LED Animations/);
+  assert.equal((await get('/static/led.js')).status, 200);
+
+  const body = await (await get('/api/led')).json();
+  assert.equal(body.connected, false);
+  assert.equal(body.stale, true);
+  assert.equal(body.top, null);
+  assert.deepEqual(body.animations.map((row) => row.id), [...Array(18).keys()]);
+  assert.deepEqual(body.layers.map((layer) => layer.layer), ['ERROR', 'ALERT', 'INFO', 'STATE']);
 });

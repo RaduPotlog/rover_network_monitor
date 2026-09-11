@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rover A1 · LED Animations</title>
+  <link rel="icon" type="image/png" href="/logos/LogoMATransparentRound-80x80-1.png">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="Rover A1 dashboard home">
+        <img class="brand-logo" src="/logos/Logo-Arm-WhiteOrange-372x372-1.png" alt="Mechatronics Academy logo" width="56" height="56">
+        <span class="brand-text">
+          <span class="brand-kicker">Mechatronics Academy · Rover A1</span>
+          <span class="brand-title">LED Animations</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Dashboard pages">
+        <a href="/">Network</a>
+        <a href="/led" aria-current="page">LEDs</a>
+      </nav>
+      <div class="live" id="live"><span class="live-dot"></span><span id="live-text">Connecting…</span></div>
+    </div>
+  </header>
+
+  <main class="page">
+    <p class="lede">Animations played by <code>rover_led</code> on the bumper lights, following the
+      <a href="https://husarion.com/manuals/panther/software/ros2/robot-management/#led-animations" target="_blank" rel="noopener">Husarion LED animation table</a>.
+      Refreshes twice a second.</p>
+    <div class="banner" id="error-banner" hidden></div>
+
+    <section class="now" id="now" aria-label="Animation on top"></section>
+
+    <section class="panel" aria-labelledby="strips-heading">
+      <div class="panel-head">
+        <h2 id="strips-heading">LED strips</h2>
+        <span class="panel-sub">Colour × brightness sent to each LED</span>
+      </div>
+      <div id="strips"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="layers-heading">
+      <div class="panel-head">
+        <h2 id="layers-heading">Priority layers</h2>
+        <span class="panel-sub">Lower layers draw on top and blend with transparency</span>
+      </div>
+      <div class="table-wrap">
+        <table class="grid">
+          <thead><tr><th>Layer</th><th>Animation</th><th>Param</th><th>Mode</th><th>Progress</th><th>Segments</th></tr></thead>
+          <tbody id="layers"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="table-heading">
+      <div class="panel-head">
+        <h2 id="table-heading">Animation table</h2>
+        <span class="panel-sub" id="table-sub"></span>
+      </div>
+      <div class="table-wrap">
+        <table class="grid">
+          <thead><tr><th class="num">ID</th><th>Name</th><th>Priority</th><th>Description</th><th>State</th></tr></thead>
+          <tbody id="animations"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <img src="/logos/Logo-Arm-WhiteOrange-372x372-1.png" alt="" width="96" height="96">
+    <div>
+      <strong>Mechatronics Academy</strong>
+      <span>Rover A1 LED animations</span>
+    </div>
+  </footer>
+
+  <script type="module" src="/static/led.js"></script>
+</body>
+</html>

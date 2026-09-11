@@ -8,9 +8,10 @@ const WEB_DIR = join(SRC_DIR, '..');
 const PUBLIC_DIR = join(WEB_DIR, 'public');
 const LOGOS_DIR = join(WEB_DIR, 'resources', 'logos');
 const INDEX_HTML = join(PUBLIC_DIR, 'index.html');
+const LED_HTML = join(PUBLIC_DIR, 'led.html');
 const STATES = ['online', 'partial', 'offline', 'unknown'];
 
-export function createApp({ monitor, topology }) {
+export function createApp({ monitor, topology, led = null }) {
   const app = express();
   app.disable('x-powered-by');
 
@@ -35,6 +36,11 @@ export function createApp({ monitor, topology }) {
   });
 
   app.get('/api/topology', (_req, res) => res.json(topology));
+
+  if (led) {
+    app.get('/api/led', (_req, res) => res.json(led.snapshot()));
+    app.get('/led', (_req, res) => res.sendFile(LED_HTML));
+  }
 
   app.get('/devices/:deviceId', (req, res) => {
     if (!monitor.device(req.params.deviceId)) {

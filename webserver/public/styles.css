@@ -66,6 +66,18 @@ h2 { font-size: 1.05rem; margin: 0; letter-spacing: .01em; }
 .live.ok .live-dot { background: var(--ok); box-shadow: 0 0 0 3px rgb(34 168 67 / 25%); }
 .live.error .live-dot { background: var(--bad); }
 
+.nav { display: flex; gap: .25rem; margin-left: auto; }
+.nav a {
+  color: var(--gray-300);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: .9rem;
+  padding: .35rem .75rem;
+  border-radius: 999px;
+}
+.nav a:hover { color: var(--white); background: var(--gray-800); }
+.nav a[aria-current="page"] { color: var(--black); background: var(--orange); }
+
 /* ---------- Page ---------- */
 .page { max-width: 1180px; margin-inline: auto; padding: 1.25rem 1rem 2rem; }
 .lede { color: var(--gray-700); margin: 0 0 1rem; }
@@ -256,6 +268,89 @@ h2 { font-size: 1.05rem; margin: 0; letter-spacing: .01em; }
 
 .back { font-weight: 600; text-decoration: none; }
 
+/* ---------- LED page ---------- */
+code { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .9em; }
+.mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+
+.now { margin-bottom: 1.25rem; }
+.now-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border-left: 5px solid var(--orange);
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+.now-card.idle { border-left-color: var(--idle); }
+.now-kicker { color: var(--gray-500); font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
+.now-card strong { font-size: 1.6rem; line-height: 1.15; }
+.now-id { color: var(--gray-500); font-weight: 600; font-size: 1.1rem; }
+.now-meta { color: var(--gray-700); font-size: .88rem; }
+.now-card .progress { max-width: 320px; }
+
+.strip + .strip { margin-top: .9rem; }
+.strip-label { color: var(--gray-700); font-size: .85rem; font-weight: 600; margin-bottom: .35rem; }
+.strip-leds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: var(--black);
+  border-radius: 8px;
+  padding: .55rem;
+}
+.led {
+  --c: rgb(0 0 0);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--c);
+  border: 1px solid var(--gray-800);
+  box-shadow: 0 0 6px var(--c);
+}
+.strip-empty { color: var(--gray-500); font-size: .85rem; padding: .1rem .25rem; }
+
+.table-wrap { overflow-x: auto; }
+.grid { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.grid th { text-align: left; color: var(--gray-500); font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; padding: .35rem .5rem; white-space: nowrap; }
+.grid td { border-top: 1px solid var(--gray-100); padding: .5rem; vertical-align: middle; }
+.grid .num { text-align: right; font-variant-numeric: tabular-nums; }
+.grid tr.active td { background: var(--orange-soft); }
+.grid tr.muted td { color: var(--gray-500); }
+.progress-cell { min-width: 150px; white-space: nowrap; }
+
+.layer-chip {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  padding: .12rem .45rem;
+  border-radius: 999px;
+  background: var(--gray-100);
+  color: var(--gray-700);
+}
+.layer-chip.layer-error { background: #fdecea; color: var(--bad); }
+.layer-chip.layer-alert { background: var(--orange-soft); color: #8a5a00; }
+.layer-chip.layer-info { background: #e8f0fe; color: #1a56b8; }
+.layer-chip.layer-state { background: #e3f5e8; color: #17752f; }
+
+.progress {
+  display: inline-block;
+  vertical-align: middle;
+  width: 100px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--gray-100);
+  overflow: hidden;
+}
+.now-card .progress { width: 100%; }
+.progress span { display: block; height: 100%; background: var(--orange); }
+.progress-text { color: var(--gray-500); font-size: .78rem; margin-left: .4rem; font-variant-numeric: tabular-nums; }
+
+.badge.playing { background: var(--orange); color: var(--black); }
+.badge.idle { background: #e3f5e8; color: #17752f; }
+
 /* ---------- Footer ---------- */
 .footer {
   background: var(--black);
@@ -275,4 +370,6 @@ h2 { font-size: 1.05rem; margin: 0; letter-spacing: .01em; }
   .brand-title { font-size: 1.1rem; }
   .brand-logo { width: 44px; height: 44px; }
   .count strong { font-size: 1.4rem; }
+  .nav { margin-left: 0; }
+  .led { width: 12px; height: 12px; }
 }

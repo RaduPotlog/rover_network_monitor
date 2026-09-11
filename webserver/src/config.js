@@ -13,6 +13,8 @@ export function integerSetting(name, defaultValue, env = process.env) {
   return value;
 }
 
+export const stringSetting = (name, defaultValue, env = process.env) => env[name] || defaultValue;
+
 /**
  * Load a JSON config, overridable without rebuilding the image.
  *
@@ -30,3 +32,4 @@ function resolveJson(prefix, bundledFile, env) {
 
 export const resolveDevices = (env = process.env) => resolveJson('ROVER_WEB_DEVICES', 'devices.json', env);
 export const resolveTopology = (env = process.env) => resolveJson('ROVER_WEB_TOPOLOGY', 'topology.json', env);
+export const resolveLedReference = () => loadJson(join(SRC_DIR, 'led_reference.json'));
