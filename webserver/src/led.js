@@ -1,7 +1,7 @@
 /**
  * LED animation status, fed by rover_led over foxglove_bridge.
  *
- * led_controller publishes the loaded animations once on /led/animations
+ * rover_led_controller publishes the loaded animations once on /led/animations
  * (latched), what every priority layer plays on /led/state (5 Hz) and one
  * RGBA frame per panel on /led/channel_<n>_frame (50 Hz, throttled here).
  * The snapshot merges that with the Husarion reference table so animations

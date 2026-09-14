@@ -27,7 +27,7 @@ function renderNow(data) {
     $('#now').innerHTML = `<div class="now-card idle">
       <span class="now-kicker">On top</span>
       <strong>${data.stale ? 'Unknown' : 'No animation'}</strong>
-      <span class="now-meta">${data.stale ? 'No LED state received from led_controller' : 'Every layer is idle'}</span>
+      <span class="now-meta">${data.stale ? 'No LED state received from rover_led_controller' : 'Every layer is idle'}</span>
     </div>`;
     return;
   }
@@ -89,7 +89,7 @@ function renderAnimations(data) {
   }).join('');
   const loaded = data.animations.filter((row) => row.configured).length;
   $('#table-sub').textContent = data.animations.some((row) => row.configured === null)
-    ? 'Waiting for the animation list from led_controller'
+    ? 'Waiting for the animation list from rover_led_controller'
     : `${loaded} of ${data.animations.length} loaded on this robot`;
 }
 
@@ -103,7 +103,7 @@ function setStatus(data, error) {
   let problem = null;
   if (error) problem = 'Unable to reach the dashboard server. Retrying…';
   else if (!data.connected) problem = 'Not connected to foxglove_bridge. Retrying…';
-  else if (data.stale) problem = 'No LED state from led_controller (/led/state). Is rover_led running?';
+  else if (data.stale) problem = 'No LED state from rover_led_controller (/led/state). Is rover_led running?';
   $('#error-banner').hidden = !problem;
   $('#error-banner').textContent = problem ?? '';
 }
