@@ -75,7 +75,7 @@ test('reports the highest-priority playing layer on top', () => {
 test('drops state and frames that stopped arriving', () => {
   const { bridge, led, advance } = setup();
   bridge.publish('/led/state', { segments: [segment('front_1', 1, { 3: { id: 0, name: 'E_STOP' } })] });
-  bridge.publish('/led/channel_1_frame', { data: Buffer.from([255, 0, 0, 255]).toString('base64') });
+  bridge.publish('/led/channel_1_frame', { data: Uint8Array.from([255, 0, 0, 255]) });
 
   advance(2500);
   const snapshot = led.snapshot();
@@ -87,8 +87,8 @@ test('drops state and frames that stopped arriving', () => {
   assert.notEqual(snapshot.updated_at, null);
 });
 
-test('decodes rgba8 frames sent as base64 or as arrays', () => {
+test('decodes rgba8 frames into one rgba tuple per LED', () => {
   const bytes = [1, 2, 3, 4, 5, 6, 7, 8];
-  assert.deepEqual(decodeRgba({ data: Buffer.from(bytes).toString('base64') }), [[1, 2, 3, 4], [5, 6, 7, 8]]);
+  assert.deepEqual(decodeRgba({ data: Uint8Array.from(bytes) }), [[1, 2, 3, 4], [5, 6, 7, 8]]);
   assert.deepEqual(decodeRgba({ data: bytes }), [[1, 2, 3, 4], [5, 6, 7, 8]]);
 });
