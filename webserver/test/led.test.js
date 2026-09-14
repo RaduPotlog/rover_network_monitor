@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import { resolveLedReference } from '../src/config.js';
-import { LedMonitor, decodeRgba } from '../src/led.js';
+import { LedMonitor, decodeRgba, namespacePrefix } from '../src/led.js';
 
 class FakeBridge {
   connected = true;
@@ -34,6 +34,19 @@ test('subscribes to the rover_led topics', () => {
   const { bridge } = setup();
   assert.deepEqual([...bridge.handlers.keys()].sort(),
     ['/led/animations', '/led/channel_1_frame', '/led/channel_2_frame', '/led/state']);
+});
+
+test('subscribes under the rover namespace', () => {
+  const bridge = new FakeBridge();
+  new LedMonitor(bridge, resolveLedReference(), { namespace: 'rover' });
+  assert.deepEqual([...bridge.handlers.keys()].sort(),
+    ['/rover/led/animations', '/rover/led/channel_1_frame', '/rover/led/channel_2_frame', '/rover/led/state']);
+});
+
+test('normalizes the namespace prefix', () => {
+  assert.equal(namespacePrefix(''), '');
+  assert.equal(namespacePrefix('rover'), '/rover');
+  assert.equal(namespacePrefix('/rover/'), '/rover');
 });
 
 test('lists the full reference table and marks what the robot has not loaded', () => {

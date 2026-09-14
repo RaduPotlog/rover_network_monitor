@@ -1,16 +1,23 @@
 /**
  * LED animation status, fed by rover_led over foxglove_bridge.
  *
- * rover_led_controller publishes the loaded animations once on /led/animations
- * (latched), what every priority layer plays on /led/state (5 Hz) and one
- * RGBA frame per panel on /led/channel_<n>_frame (50 Hz, throttled here).
+ * rover_led_controller publishes the loaded animations once on <ns>/led/animations
+ * (latched), what every priority layer plays on <ns>/led/state (5 Hz) and one
+ * RGBA frame per panel on <ns>/led/channel_<n>_frame (50 Hz, throttled here).
+ * <ns> is the rover's ROS namespace (ROVER_NAMESPACE), empty for none.
  * The snapshot merges that with the Husarion reference table so animations
  * the robot has not loaded still show up, marked as not configured.
  */
+/** "rover", "/rover/" -> "/rover"; "" -> "" (topics stay at the root). */
+export const namespacePrefix = (namespace) => {
+  const trimmed = namespace.replace(/^\/+|\/+$/g, '');
+  return trimmed ? `/${trimmed}` : '';
+};
+
 const FRAME_OPTIONS = { throttle_rate: 200, queue_length: 1 };
 
 export class LedMonitor {
-  constructor(bridge, reference, { channels = [1, 2], staleMs = 2000, now = () => Date.now() } = {}) {
+  constructor(bridge, reference, { namespace = '', channels = [1, 2], staleMs = 2000, now = () => Date.now() } = {}) {
     this.bridge = bridge;
     this.reference = reference;
     this.layerNames = reference.layers;
@@ -20,16 +27,17 @@ export class LedMonitor {
     this.state = null;
     this.stateAt = null;
     this.frames = new Map(channels.map((channel) => [channel, null]));
+    const ns = namespacePrefix(namespace);
 
-    bridge.subscribe('/led/animations', 'rover_msgs/msg/LedAnimationCatalog', (msg) => {
+    bridge.subscribe(`${ns}/led/animations`, 'rover_msgs/msg/LedAnimationCatalog', (msg) => {
       this.catalog = msg.animations;
     });
-    bridge.subscribe('/led/state', 'rover_msgs/msg/LedState', (msg) => {
+    bridge.subscribe(`${ns}/led/state`, 'rover_msgs/msg/LedState', (msg) => {
       this.state = msg;
       this.stateAt = this.now();
     });
     for (const channel of channels) {
-      bridge.subscribe(`/led/channel_${channel}_frame`, 'sensor_msgs/msg/Image', (msg) => {
+      bridge.subscribe(`${ns}/led/channel_${channel}_frame`, 'sensor_msgs/msg/Image', (msg) => {
         this.frames.set(channel, { leds: decodeRgba(msg), at: this.now() });
       }, FRAME_OPTIONS);
     }

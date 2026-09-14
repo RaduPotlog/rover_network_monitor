@@ -103,7 +103,7 @@ function setStatus(data, error) {
   let problem = null;
   if (error) problem = 'Unable to reach the dashboard server. Retrying…';
   else if (!data.connected) problem = 'Not connected to foxglove_bridge. Retrying…';
-  else if (data.stale) problem = 'No LED state from rover_led_controller (/led/state). Is rover_led running?';
+  else if (data.stale) problem = 'No LED state from rover_led_controller (led/state). Is rover_led running?';
   $('#error-banner').hidden = !problem;
   $('#error-banner').textContent = problem ?? '';
 }

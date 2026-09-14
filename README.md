@@ -30,6 +30,7 @@ or, from `webserver/`: `npm ci && npm start`. Requires Node.js 22+ (for the buil
 | `ROVER_WEB_DEVICES_JSON` / `ROVER_WEB_DEVICES_FILE` | `webserver/src/devices.json` | Monitored devices and interfaces |
 | `ROVER_WEB_TOPOLOGY_JSON` / `ROVER_WEB_TOPOLOGY_FILE` | `webserver/src/topology.json` | Diagram nodes, positions and cables |
 | `ROVER_WEB_FOXGLOVE_URL` | `ws://127.0.0.1:8765` | foxglove_bridge websocket used by the LED page |
+| `ROVER_NAMESPACE` | *(empty)* | ROS namespace of the rover topics the LED page subscribes to (e.g. `rover` → `/rover/led/state`) |
 
 Topology link ends reference a device interface by `name`; ends without an
 `interface` (switch ports, the upstream Wi-Fi) mirror the far end's state.

@@ -8,10 +8,11 @@ const PORT = integerSetting('ROVER_WEB_PORT', 8080);
 const POLL_INTERVAL_SECONDS = integerSetting('ROVER_WEB_POLL_INTERVAL_SECONDS', 5);
 const PING_TIMEOUT_SECONDS = integerSetting('ROVER_WEB_PING_TIMEOUT_SECONDS', 1);
 const FOXGLOVE_URL = stringSetting('ROVER_WEB_FOXGLOVE_URL', 'ws://127.0.0.1:8765');
+const ROVER_NAMESPACE = stringSetting('ROVER_NAMESPACE', '');
 
 const monitor = new NetworkMonitor(resolveDevices(), new PingProber(), PING_TIMEOUT_SECONDS);
 const bridge = new FoxgloveBridgeClient(FOXGLOVE_URL);
-const led = new LedMonitor(bridge, resolveLedReference());
+const led = new LedMonitor(bridge, resolveLedReference(), { namespace: ROVER_NAMESPACE });
 const app = createApp({ monitor, topology: resolveTopology(), led });
 
 bridge.start();
