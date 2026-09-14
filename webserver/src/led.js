@@ -1,5 +1,5 @@
 /**
- * LED animation status, fed by rover_led over rosbridge.
+ * LED animation status, fed by rover_led over foxglove_bridge.
  *
  * led_controller publishes the loaded animations once on /led/animations
  * (latched), what every priority layer plays on /led/state (5 Hz) and one
@@ -107,9 +107,9 @@ function activeOnLayer(segments, priority) {
   return [...byId.values()];
 }
 
-/** sensor_msgs/Image (rgba8) → [[r, g, b, a], …]; rosbridge sends uint8[] as base64. */
+/** sensor_msgs/Image (rgba8) → [[r, g, b, a], …]; the CDR reader yields uint8[] as a Uint8Array. */
 export function decodeRgba(msg) {
-  const bytes = typeof msg.data === 'string' ? Buffer.from(msg.data, 'base64') : Uint8Array.from(msg.data ?? []);
+  const bytes = msg.data ?? [];
   const leds = [];
   for (let i = 0; i + 3 < bytes.length; i += 4) {
     leds.push([bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]]);
